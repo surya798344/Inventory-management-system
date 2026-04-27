@@ -1,0 +1,138 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure for product
+struct Product {
+    int id;
+    char name[50];
+    int quantity;
+    float price;
+};
+
+// Authentication
+void login() {
+    char username[20], password[20];
+
+    printf("\n--- Login ---\n");
+    printf("Enter Username: ");
+    scanf("%s", username);
+    printf("Enter Password: ");
+    scanf("%s", password);
+
+    if (strcmp(username, "admin") == 0 && strcmp(password, "1234") == 0) {
+        printf("\nLogin Successful!\n");
+    } else {
+        printf("\nInvalid Login! Exiting...\n");
+        exit(0);
+    }
+}
+
+// Add product
+void addProduct() {
+    FILE *fp;
+    struct Product p;
+
+    fp = fopen("inventory.dat", "ab");
+
+    printf("\nEnter Product ID: ");
+    scanf("%d", &p.id);
+    printf("Enter Product Name: ");
+    scanf("%s", p.name);
+    printf("Enter Quantity: ");
+    scanf("%d", &p.quantity);
+    printf("Enter Price: ");
+    scanf("%f", &p.price);
+
+    fwrite(&p, sizeof(p), 1, fp);
+    fclose(fp);
+
+    printf("\nProduct Added Successfully!\n");
+}
+
+// Display all products
+void displayProducts() {
+    FILE *fp;
+    struct Product p;
+
+    fp = fopen("inventory.dat", "rb");
+
+    if (fp == NULL) {
+        printf("\nNo records found!\n");
+        return;
+    }
+
+    printf("\n--- Product List ---\n");
+
+    while (fread(&p, sizeof(p), 1, fp)) {
+        printf("\nID: %d\nName: %s\nQty: %d\nPrice: %.2f\n",
+               p.id, p.name, p.quantity, p.price);
+    }
+
+    fclose(fp);
+}
+
+// Search product
+void searchProduct() {
+    FILE *fp;
+    struct Product p;
+    int id, found = 0;
+
+    fp = fopen("inventory.dat", "rb");
+
+    printf("\nEnter Product ID to Search: ");
+    scanf("%d", &id);
+
+    while (fread(&p, sizeof(p), 1, fp)) {
+        if (p.id == id) {
+            printf("\nProduct Found!\n");
+            printf("ID: %d\nName: %s\nQty: %d\nPrice: %.2f\n",
+                   p.id, p.name, p.quantity, p.price);
+            found = 1;
+            break;
+        }
+    }
+
+    if (!found) {
+        printf("\nProduct Not Found!\n");
+    }
+
+    fclose(fp);
+}
+
+// Main Driver Module
+int main() {
+    int choice;
+
+    login();
+
+    while (1) {
+        printf("\n\n--- Inventory Menu ---\n");
+        printf("1. Add Product\n");
+        printf("2. Display Products\n");
+        printf("3. Search Product\n");
+        printf("4. Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                addProduct();
+                break;
+            case 2:
+                displayProducts();
+                break;
+            case 3:
+                searchProduct();
+                break;
+            case 4:
+                printf("\nExiting...\n");
+                exit(0);
+            default:
+                printf("\nInvalid Choice!\n");
+        }
+    }
+
+    return 0;
+}
