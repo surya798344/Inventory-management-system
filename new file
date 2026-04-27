@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Structure for product
 struct Product {
     int id;
     char name[50];
@@ -10,7 +9,6 @@ struct Product {
     float price;
 };
 
-// Authentication
 void login() {
     char username[20], password[20];
 
@@ -28,7 +26,6 @@ void login() {
     }
 }
 
-// Add product
 void addProduct() {
     FILE *fp;
     struct Product p;
@@ -50,7 +47,6 @@ void addProduct() {
     printf("\nProduct Added Successfully!\n");
 }
 
-// Display all products
 void displayProducts() {
     FILE *fp;
     struct Product p;
@@ -72,7 +68,6 @@ void displayProducts() {
     fclose(fp);
 }
 
-// Search product
 void searchProduct() {
     FILE *fp;
     struct Product p;
@@ -100,7 +95,6 @@ void searchProduct() {
     fclose(fp);
 }
 
-// Main Driver Module
 int main() {
     int choice;
 
